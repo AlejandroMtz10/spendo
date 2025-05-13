@@ -32,7 +32,7 @@ public class CurrencyService {
 
     public Currency updateCurrency(String code, Currency currency) {
         if (currencyRepository.existsById(code)) {
-            currency.setCodeCurrency(code);
+            currency.setCode_currency(code);
             return currencyRepository.save(currency);
         } else {
             return null; // or throw an exception

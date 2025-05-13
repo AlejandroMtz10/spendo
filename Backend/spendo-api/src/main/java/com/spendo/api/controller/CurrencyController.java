@@ -35,7 +35,14 @@ public class CurrencyController {
         currencyService.createcCurrency(Currency);
     }
 
-    @PutMapping(value = "updateCategory/{code}", headers = "Accept=application/json")
+    @PostMapping(value = "createAllCurrencies", headers = "Accept=application/json")
+    public ResponseEntity<List<Currency>> createAllCurrencies(@RequestBody List<Currency> currencies) {
+        List<Currency> created = currencyService.createAll(currencies);
+        return new ResponseEntity<>(created, HttpStatus.CREATED);
+    }
+
+
+    @PutMapping(value = "updateCurrency/{code}", headers = "Accept=application/json")
     public ResponseEntity<Currency> updateCurrency(@PathVariable String code, @RequestBody Currency currency) {
         Currency updatedCurrency = currencyService.updateCurrency(code, currency);
         if (updatedCurrency != null) {
