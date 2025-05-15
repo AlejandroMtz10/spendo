@@ -3,24 +3,24 @@ create database spendo;
 use spendo;
 
 create table users(
-	id_user int primary key auto_increment,
+	id_user int auto_increment primary key,
     username varchar(50) not null,
     password_user varchar(50) not null,
     codeAccess varchar(15) not null
 );
 
 create table locations(
-	id_local int primary key auto_increment,
+	id_local int auto_increment primary key,
     location varchar(25) not null
 );
 
-create table typeFlows(
-	id_type int primary key auto_increment,
+create table type_flows(
+	id_type int auto_increment primary key,
     flow varchar(50) not null
 );
 
 create table categories(
-	id_category int primary key auto_increment,
+	id_category int auto_increment primary key,
     category varchar(50) not null
 );
 
@@ -33,7 +33,7 @@ create table currencies(
 
 
 create table budgets(
-	id_budget int primary key auto_increment,
+	id_budget int auto_increment primary key,
     id_user int not null,
     code_currency varchar(5) not null,
     mount_goal float not null,
@@ -44,7 +44,7 @@ create table budgets(
 );
 
 create table transactions(
-	id_transaction int primary key auto_increment,
+	id_transaction int auto_increment primary key,
     id_type int not null,
     id_user int not null,
     id_local int not null,
@@ -58,3 +58,5 @@ create table transactions(
 	foreign key (code_currency) references currencies(code_currency),
     foreign key (id_category) references categories(id_category)
 );
+
+select * from type_flows;

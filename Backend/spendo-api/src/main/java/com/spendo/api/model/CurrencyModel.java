@@ -13,7 +13,7 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "currencies")
-public class Currency {
+public class CurrencyModel {
 
     @Id
     @Column(name = "code_currency")

@@ -1,6 +1,6 @@
 package com.spendo.api.service;
 
-import com.spendo.api.model.Currency;
+import com.spendo.api.model.CurrencyModel;
 import com.spendo.api.repository.ICurrencyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,24 +13,24 @@ public class CurrencyService {
     @Autowired
     private ICurrencyRepository currencyRepository;
 
-    public List<Currency> getAllCurrencies() {
+    public List<CurrencyModel> getAllCurrencies() {
         return currencyRepository.findAll();
     }
 
-    public Optional<Currency> getCurrencyByCode(String code) {
+    public Optional<CurrencyModel> getCurrencyByCode(String code) {
         return currencyRepository.findById(code);
     }
     
-    public List<Currency> createAll(List<Currency> currencies){
+    public List<CurrencyModel> createAll(List<CurrencyModel> currencies){
         return currencyRepository.saveAll(currencies);
     }
 
 
-    public Currency createcCurrency(Currency currency){
+    public CurrencyModel createcCurrency(CurrencyModel currency){
         return currencyRepository.save(currency);
     }
 
-    public Currency updateCurrency(String code, Currency currency) {
+    public CurrencyModel updateCurrency(String code, CurrencyModel currency) {
         if (currencyRepository.existsById(code)) {
             currency.setCode_currency(code);
             return currencyRepository.save(currency);

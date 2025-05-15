@@ -32,7 +32,7 @@ public class LocationController {
         locationService.createLocation(location);
     }
 
-        @PostMapping(value = "createAllLocations", headers = "Accept=application/json")
+    @PostMapping(value = "createAllLocations", headers = "Accept=application/json")
     public ResponseEntity<List<LocationsModel>> createAllLocations(@RequestBody List<LocationsModel> Location) {
         List<LocationsModel> created = locationService.createAll(Location);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
