@@ -6,7 +6,7 @@ create table users(
 	id_user int auto_increment primary key,
     username varchar(50) not null,
     password_user varchar(50) not null,
-    codeAccess varchar(15) not null
+    code_access varchar(15) not null
 );
 
 create table locations(
@@ -59,4 +59,6 @@ create table transactions(
     foreign key (id_category) references categories(id_category)
 );
 
-select * from Categories;
+select * from users;
+
+
