@@ -52,11 +52,11 @@ create table transactions(
     id_category int not null,
     mount float not null,
     date_transaction datetime not null,
-	foreign key (id_type) references typeFlows(id_type),
+	foreign key (id_type) references type_flows(id_type),
 	foreign key (id_user) references users(id_user),
 	foreign key (id_local) references locations(id_local),
 	foreign key (code_currency) references currencies(code_currency),
     foreign key (id_category) references categories(id_category)
 );
 
-select * from type_flows;
+select * from Categories;

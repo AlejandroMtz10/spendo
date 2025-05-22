@@ -2,7 +2,6 @@ package com.spendo.api.controller;
 import com.spendo.api.model.TypeFlowModel;
 import com.spendo.api.service.TypeFlowService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
