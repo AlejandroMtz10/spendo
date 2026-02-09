@@ -4,7 +4,7 @@ Application to show individuals their money balance
 
 ## Tools and technologies
 
-- Database: MySQL
+- Database: To be define
 - Backed:  To be define
 - Frontend: To be define
-- Tools: MySQL Workbench, VS Code, Git, GitHub
+- Tools: VS Code, Git, GitHub

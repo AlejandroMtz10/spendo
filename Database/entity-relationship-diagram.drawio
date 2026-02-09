@@ -1,0 +1,126 @@
+<mxfile host="65bd71144e">
+    <diagram name="Spendo ER Diagram" id="diagram-1">
+        <mxGraphModel dx="1538" dy="779" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#ffffff" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="users-table" value="users" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F4F8;strokeColor=#0077B6;strokeWidth=2;fontSize=14;fontStyle=bold" vertex="1" parent="1">
+                    <mxGeometry x="80" y="80" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="users-pk" value="PK: user_id (UUID)" style="text;html=1;align=left;verticalAlign=top;fillColor=#E8F4F8;strokeColor=#0077B6;strokeWidth=1;fontSize=11;fontStyle=bold" vertex="1" parent="1">
+                    <mxGeometry x="85" y="110" width="190" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="users-fields" value="full_name (VARCHAR 150)&#xa;email (VARCHAR 150) UNIQUE&#xa;password (VARCHAR 255)&#xa;created_at (TIMESTAMP)&#xa;updated_at (TIMESTAMP)" style="text;html=1;align=left;verticalAlign=top;fillColor=#E8F4F8;strokeColor=#0077B6;strokeWidth=1;fontSize=10" vertex="1" parent="1">
+                    <mxGeometry x="85" y="130" width="190" height="85" as="geometry"/>
+                </mxCell>
+                <mxCell id="currencies-table" value="currencies" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F4F8;strokeColor=#0077B6;strokeWidth=2;fontSize=14;fontStyle=bold" vertex="1" parent="1">
+                    <mxGeometry x="75" y="270" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="currencies-pk" value="PK: code_currency (CHAR 3)" style="text;html=1;align=left;verticalAlign=top;fillColor=#E8F4F8;strokeColor=#0077B6;strokeWidth=1;fontSize=11;fontStyle=bold" vertex="1" parent="1">
+                    <mxGeometry x="80" y="300" width="190" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="currencies-fields" value="currency (VARCHAR 50)" style="text;html=1;align=left;verticalAlign=top;fillColor=#E8F4F8;strokeColor=#0077B6;strokeWidth=1;fontSize=10" vertex="1" parent="1">
+                    <mxGeometry x="80" y="320" width="190" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="accounts-table" value="accounts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFE8D8;strokeColor=#D84315;strokeWidth=2;fontSize=14;fontStyle=bold" vertex="1" parent="1">
+                    <mxGeometry x="630" y="50" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="accounts-pk" value="PK: account_id (UUID)" style="text;html=1;align=left;verticalAlign=top;fillColor=#FFE8D8;strokeColor=#D84315;strokeWidth=1;fontSize=11;fontStyle=bold" vertex="1" parent="1">
+                    <mxGeometry x="635" y="80" width="190" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="accounts-fk" value="FK: user_id → users&#xa;FK: code_currency → currencies" style="text;html=1;align=left;verticalAlign=top;fillColor=#FFE8D8;strokeColor=#D84315;strokeWidth=1;fontSize=10;fontStyle=italic" vertex="1" parent="1">
+                    <mxGeometry x="635" y="100" width="190" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="accounts-fields" value="name (VARCHAR 100)&#xa;type (ENUM: bank, cash, wallet, crypto)&#xa;balance (DECIMAL 15,2)&#xa;color (VARCHAR 20)&#xa;created_at (TIMESTAMP)&#xa;updated_at (TIMESTAMP)" style="text;html=1;align=left;verticalAlign=top;fillColor=#FFE8D8;strokeColor=#D84315;strokeWidth=1;fontSize=10" vertex="1" parent="1">
+                    <mxGeometry x="635" y="130" width="190" height="75" as="geometry"/>
+                </mxCell>
+                <mxCell id="categories-table" value="categories" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#7B1FA2;strokeWidth=2;fontSize=14;fontStyle=bold" vertex="1" parent="1">
+                    <mxGeometry x="635" y="270" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="categories-pk" value="PK: category_id (UUID)" style="text;html=1;align=left;verticalAlign=top;fillColor=#F3E5F5;strokeColor=#7B1FA2;strokeWidth=1;fontSize=11;fontStyle=bold" vertex="1" parent="1">
+                    <mxGeometry x="640" y="300" width="190" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="categories-fk" value="FK: user_id → users" style="text;html=1;align=left;verticalAlign=top;fillColor=#F3E5F5;strokeColor=#7B1FA2;strokeWidth=1;fontSize=10;fontStyle=italic" vertex="1" parent="1">
+                    <mxGeometry x="640" y="320" width="190" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="categories-fields" value="name (VARCHAR 100)&#xa;type (ENUM: income, expense)&#xa;icon (VARCHAR 50)&#xa;created_at (TIMESTAMP)&#xa;updated_at (TIMESTAMP)" style="text;html=1;align=left;verticalAlign=top;fillColor=#F3E5F5;strokeColor=#7B1FA2;strokeWidth=1;fontSize=10" vertex="1" parent="1">
+                    <mxGeometry x="640" y="340" width="190" height="75" as="geometry"/>
+                </mxCell>
+                <mxCell id="transactions-table" value="transactions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#388E3C;strokeWidth=2;fontSize=14;fontStyle=bold" vertex="1" parent="1">
+                    <mxGeometry x="635" y="450" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="transactions-pk" value="PK: transaction_id (UUID)" style="text;html=1;align=left;verticalAlign=top;fillColor=#E8F5E9;strokeColor=#388E3C;strokeWidth=1;fontSize=11;fontStyle=bold" vertex="1" parent="1">
+                    <mxGeometry x="640" y="480" width="190" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="transactions-fk" value="FK: user_id → users&#xa;FK: account_id → accounts&#xa;FK: category_id → categories" style="text;html=1;align=left;verticalAlign=top;fillColor=#E8F5E9;strokeColor=#388E3C;strokeWidth=1;fontSize=10;fontStyle=italic" vertex="1" parent="1">
+                    <mxGeometry x="640" y="500" width="190" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="transactions-fields" value="amount (DECIMAL 15,2)&#xa;description (TEXT)&#xa;date (TIMESTAMP)&#xa;type (ENUM: income, expense)&#xa;created_at (TIMESTAMP)&#xa;updated_at (TIMESTAMP)" style="text;html=1;align=left;verticalAlign=top;fillColor=#E8F5E9;strokeColor=#388E3C;strokeWidth=1;fontSize=10" vertex="1" parent="1">
+                    <mxGeometry x="640" y="545" width="190" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="MrlFWr9YMtVGKimtezkA-2" value="" style="edgeStyle=segmentEdgeStyle;endArrow=classic;html=1;curved=0;rounded=0;endSize=8;startSize=8;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" source="users-pk" target="accounts-fk">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="540" y="340" as="sourcePoint"/>
+                        <mxPoint x="590" y="290" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="430" y="120"/>
+                            <mxPoint x="430" y="108"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="MrlFWr9YMtVGKimtezkA-3" value="" style="edgeStyle=segmentEdgeStyle;endArrow=classic;html=1;curved=0;rounded=0;endSize=8;startSize=8;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" source="users-pk" target="categories-fk">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="340" y="330" as="sourcePoint"/>
+                        <mxPoint x="390" y="280" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="430" y="120"/>
+                            <mxPoint x="430" y="325"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="MrlFWr9YMtVGKimtezkA-4" value="" style="edgeStyle=segmentEdgeStyle;endArrow=classic;html=1;curved=0;rounded=0;endSize=8;startSize=8;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" source="users-pk" target="transactions-fk">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="285" y="130" as="sourcePoint"/>
+                        <mxPoint x="650" y="335" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="430" y="120"/>
+                            <mxPoint x="430" y="511"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="MrlFWr9YMtVGKimtezkA-5" value="" style="edgeStyle=segmentEdgeStyle;endArrow=classic;html=1;curved=0;rounded=0;endSize=8;startSize=8;exitX=1;exitY=0.75;exitDx=0;exitDy=0;entryX=0;entryY=0.75;entryDx=0;entryDy=0;" edge="1" parent="1" source="currencies-pk" target="accounts-fk">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="295" y="140" as="sourcePoint"/>
+                        <mxPoint x="660" y="345" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="350" y="315"/>
+                            <mxPoint x="350" y="270"/>
+                            <mxPoint x="540" y="270"/>
+                            <mxPoint x="540" y="123"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="MrlFWr9YMtVGKimtezkA-6" value="" style="edgeStyle=segmentEdgeStyle;endArrow=classic;html=1;curved=0;rounded=0;endSize=8;startSize=8;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="accounts-pk" target="transactions-fk">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="835" y="110" as="sourcePoint"/>
+                        <mxPoint x="1200" y="315" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="990" y="90"/>
+                            <mxPoint x="990" y="523"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="MrlFWr9YMtVGKimtezkA-7" value="" style="edgeStyle=segmentEdgeStyle;endArrow=classic;html=1;curved=0;rounded=0;endSize=8;startSize=8;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.75;entryDx=0;entryDy=0;" edge="1" parent="1" source="categories-pk" target="transactions-fk">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="850" y="306" as="sourcePoint"/>
+                        <mxPoint x="855" y="739" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="1015" y="310"/>
+                            <mxPoint x="1015" y="534"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
