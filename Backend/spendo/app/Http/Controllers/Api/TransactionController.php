@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 use App\Models\Transaction;
 use App\Models\Account;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TransactionRequest;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 use App\Http\Resources\TransactionsResource;
@@ -23,26 +24,14 @@ class TransactionController extends Controller{
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request) {
+    public function store(TransactionRequest $request) {
         $user = $request->user();
+        
+        // Obtener datos validados
+        $validated = $request->validated();
 
-        $validated = $request->validate([
-            'account_id' => [
-                'required', 'uuid', 
-                Rule::exists('accounts', 'account_id')->where('user_id', $user->user_id)
-            ],
-            'category_id' => [
-                'required', 'uuid', 
-                Rule::exists('categories', 'category_id')->where('user_id', $user->user_id)
-            ],
-            'amount' => 'required|numeric|min:0.01',
-            'type' => 'required|in:income,expense',
-            'description' => 'nullable|string',
-            'date' => 'required|date'
-        ]);
-
-        // Usar una transacción de base de datos para asegurar que todo ocurra o nada ocurra
         return DB::transaction(function () use ($validated, $user) {
+            // Crear la transaccion con el user_id del usuario autenticado
             $transaction = Transaction::create([
                 ...$validated,
                 'user_id' => $user->user_id
@@ -50,7 +39,6 @@ class TransactionController extends Controller{
 
             $account = Account::lockForUpdate()->findOrFail($validated['account_id']);
 
-            // Ajustamos el saldo según el tipo
             if ($validated['type'] === 'income') {
                 $account->balance += $validated['amount'];
             } else {
@@ -59,7 +47,7 @@ class TransactionController extends Controller{
 
             $account->save();
 
-            return response()->json(new TransactionsResource($transaction), 201);
+            return new TransactionsResource($transaction);
         });
     }
 
