@@ -15,8 +15,6 @@ return new class extends Migration {
             $table->string('name', 100);
             $table->enum('type', ['bank', 'cash', 'wallet', 'crypto']);
             $table->decimal('balance', 15, 2)->default(0);
-            $table->string('color', 20)->nullable();
-
             $table->timestamps();
 
             $table->foreign('user_id')

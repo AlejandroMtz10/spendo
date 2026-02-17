@@ -20,7 +20,6 @@ class Account extends Model
         'name',
         'type',
         'balance',
-        'color'
     ];
 
     /* ================= RELATIONSHIPS ================= */
