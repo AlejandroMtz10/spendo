@@ -13,12 +13,6 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
-Route::post('/currency',[CurrencyController::class, 'store']);
-Route::put('/currency/{currency}',[CurrencyController::class, 'update']);
-Route::delete('/currency/{currency}',[CurrencyController::class, 'destroy']);
-Route::get('/currency',[CurrencyController::class, 'index']);
-Route::get('/currency/{currency}',[CurrencyController::class, 'show']);
-
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -30,4 +24,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('accounts', AccountController::class);
     Route::apiResource('transactions', TransactionController::class);
     Route::apiResource('categories', CategoryController::class);
+    Route::apiResource('currencies', CurrencyController::class);
+
 });
