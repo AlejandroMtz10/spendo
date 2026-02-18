@@ -13,7 +13,6 @@ return new class extends Migration {
 
             $table->string('name', 100);
             $table->enum('type', ['income', 'expense']);
-            $table->string('icon', 50)->nullable();
 
             $table->timestamps();
 
