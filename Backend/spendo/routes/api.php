@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\CurrencyController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Api\Dashboard\SummaryController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -25,5 +26,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('transactions', TransactionController::class);
     Route::apiResource('categories', CategoryController::class);
     Route::apiResource('currencies', CurrencyController::class);
+
+    Route::prefix('dashboard')->group(function () {
+        Route::get('/main', [SummaryController::class, 'getMainDashboard']);
+        Route::get('/expenses', [SummaryController::class, 'getExpenseAnalysis']);
+        Route::get('/savings', [SummaryController::class, 'getSavingsDashboard']);
+    });
 
 });
