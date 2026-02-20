@@ -3,10 +3,10 @@
         Spendo API - Backend
     </h1>
     <p>
-        <strong>English | <a href="#es-español">Español</a></strong>
+        <strong><a href="#en-english">English</a> | <a href="#es-español">Español</a></strong>
     </p>
 </div>
-
+<a name="en-english"></a>
 <h2>English version</h2>
 
 <p>This API connects with a Supabase database using the PostgreSQL engine to manage the logic of the Spendo application. Built with PHP 12.50.0 and the Laravel 12.x framework.</p>
@@ -88,4 +88,6 @@
 
 <hr>
 
-<p><code>v1.1.1</code></p>
+<div align="center">
+    <p><code>v1.1.1</code></p>
+</div>
