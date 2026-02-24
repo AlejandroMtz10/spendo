@@ -32,6 +32,7 @@
         <li><strong>Database:</strong> PostgreSQL (Supabase)</li>
         <li><strong>Auth:</strong> Laravel Sanctum</li>
         <li><strong>Server:</strong> PHP 12.50.0+</li>
+        <li><strong>Deploy API:</strong> Railway</li>
     </ul>
 
 <h4>⚙️ Setup & Installation</h4>
@@ -75,6 +76,7 @@
         <li><strong>Base de Datos:</strong> PostgreSQL (Supabase)</li>
         <li><strong>Autenticación:</strong> Laravel Sanctum</li>
         <li><strong>Servidor:</strong> PHP 12.50.0+</li>
+        <li><strong>Despliegue de API:</strong> Railway</li>
     </ul>
 
 <h4>⚙️ Configuración e Instalación</h4>
