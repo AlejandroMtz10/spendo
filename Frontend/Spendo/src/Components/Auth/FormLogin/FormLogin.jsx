@@ -64,7 +64,7 @@ export const FormLogin = ({ showPassword, setShowPassword }) => {
 
             <div className="space-y-3">
                 <Link 
-                    to="/register"
+                    to="/SignUp"
                     className="w-full flex items-center justify-center gap-2 bg-transparent hover:bg-neutral-800 text-white font-semibold py-3.5 rounded-2xl border border-neutral-700 transition-all active:scale-[0.98]"
                 >
                     Sign up
