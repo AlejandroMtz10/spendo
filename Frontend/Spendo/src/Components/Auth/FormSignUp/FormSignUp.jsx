@@ -1,12 +1,52 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { LuArrowUpDown, LuMail, LuLock, LuEye, LuEyeOff, LuUser, LuX } from "react-icons/lu";
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import api from '../../../api/connection.jsx';
 
 export const FormSignUp = ({ showPassword, setShowPassword, showConfirmPassword, setShowConfirmPassword }) => {
-
     const navigate = useNavigate();
+    
+    // 1. Local state for inputs
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        password: '',
+        password_confirmation: ''
+    });
 
-    return(
+    // 2. Inputs change manager
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    // 3. Post data to backend
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        // Basic validation: check if passwords match
+        if (formData.password !== formData.password_confirmation) {
+            alert("Passwords do not match!");
+            return;
+        }
+
+        try {
+            // instance connection with axios, post to /register endpoint
+            const response = await api.post('/register', formData);
+            
+            if (response.status === 201 || response.status === 200) {
+                alert("Account created successfully!");
+                navigate('/'); // direct to login page after successful registration
+            }
+        } catch (error) {
+            console.error("Error details:", error.response?.data);
+            alert(error.response?.data?.message || "Error during registration");
+        }
+    };
+
+    return (
         <div className="p-8 md:p-12 flex flex-col justify-center bg-neutral-900">
             <div className="mb-8 text-center md:text-left">
                 <div className="flex items-center justify-center md:justify-start gap-3 mb-6">
@@ -17,13 +57,18 @@ export const FormSignUp = ({ showPassword, setShowPassword, showConfirmPassword,
                 <p className="text-neutral-500 text-sm mt-2">Join us to start managing your flow.</p>
             </div>
 
-            <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+            {/* Add onSubmit */}
+            <form className="space-y-4" onSubmit={handleSubmit}>
                 {/* Full Name */}
                 <div>
                     <label className="block text-sm font-medium text-neutral-400 mb-1.5 ml-1">Full Name</label>
                     <div className="relative group">
                         <LuUser className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-600 group-focus-within:text-emerald-400 transition-colors" />
                         <input 
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            required
                             type="text" 
                             placeholder="John Doe"
                             className="w-full bg-neutral-800/50 border border-neutral-700 rounded-2xl py-3 pl-12 pr-4 text-white placeholder:text-neutral-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all"
@@ -37,6 +82,10 @@ export const FormSignUp = ({ showPassword, setShowPassword, showConfirmPassword,
                     <div className="relative group">
                         <LuMail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-600 group-focus-within:text-emerald-400 transition-colors" />
                         <input 
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
                             type="email" 
                             placeholder="name@example.com"
                             className="w-full bg-neutral-800/50 border border-neutral-700 rounded-2xl py-3 pl-12 pr-4 text-white placeholder:text-neutral-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all"
@@ -50,6 +99,10 @@ export const FormSignUp = ({ showPassword, setShowPassword, showConfirmPassword,
                     <div className="relative group">
                         <LuLock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-600 group-focus-within:text-emerald-400 transition-colors" />
                         <input 
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            required
                             type={showPassword ? "text" : "password"} 
                             placeholder="••••••••"
                             className="w-full bg-neutral-800/50 border border-neutral-700 rounded-2xl py-3 pl-12 pr-12 text-white placeholder:text-neutral-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all"
@@ -70,6 +123,10 @@ export const FormSignUp = ({ showPassword, setShowPassword, showConfirmPassword,
                     <div className="relative group">
                         <LuLock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-600 group-focus-within:text-emerald-400 transition-colors" />
                         <input 
+                            name="password_confirmation"
+                            value={formData.password_confirmation}
+                            onChange={handleChange}
+                            required
                             type={showConfirmPassword ? "text" : "password"} 
                             placeholder="••••••••"
                             className="w-full bg-neutral-800/50 border border-neutral-700 rounded-2xl py-3 pl-12 pr-12 text-white placeholder:text-neutral-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all"
@@ -86,7 +143,10 @@ export const FormSignUp = ({ showPassword, setShowPassword, showConfirmPassword,
 
                 {/* Action buttons */}
                 <div className="pt-2 space-y-3">
-                    <button className="w-full bg-emerald-500 hover:bg-emerald-400 text-neutral-950 font-bold py-3.5 rounded-2xl transition-all shadow-lg shadow-emerald-500/10 active:scale-[0.98]">
+                    <button 
+                        type="submit"
+                        className="w-full bg-emerald-500 hover:bg-emerald-400 text-neutral-950 font-bold py-3.5 rounded-2xl transition-all shadow-lg shadow-emerald-500/10 active:scale-[0.98]"
+                    >
                         Register
                     </button>
                     
@@ -100,10 +160,6 @@ export const FormSignUp = ({ showPassword, setShowPassword, showConfirmPassword,
                     </button>
                 </div>
             </form>
-
-            <p className="mt-6 text-center text-[11px] text-neutral-600 leading-relaxed px-4">
-                By signing up, you agree to our <span className="text-neutral-400 underline underline-offset-4 cursor-pointer hover:text-emerald-400 transition-colors">Terms of Service</span>.
-            </p>
         </div>
     );
 };
