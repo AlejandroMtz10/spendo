@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { LuArrowUpDown, LuMail, LuLock, LuEye, LuEyeOff, LuUser, LuX } from "react-icons/lu";
 import { useNavigate } from 'react-router-dom';
 import api from '../../../api/connection.jsx';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const FormSignUp = ({ showPassword, setShowPassword, showConfirmPassword, setShowConfirmPassword }) => {
     const navigate = useNavigate();
     
-    // 1. Local state for inputs
+    // Local state for inputs
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -14,7 +16,7 @@ export const FormSignUp = ({ showPassword, setShowPassword, showConfirmPassword,
         password_confirmation: ''
     });
 
-    // 2. Inputs change manager
+    // Inputs change manager
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -22,13 +24,19 @@ export const FormSignUp = ({ showPassword, setShowPassword, showConfirmPassword,
         });
     };
 
-    // 3. Post data to backend
+    // Post data to backend
     const handleSubmit = async (e) => {
         e.preventDefault();
         
         // Basic validation: check if passwords match
         if (formData.password !== formData.password_confirmation) {
-            alert("Passwords do not match!");
+            toast.error(
+                "Passwords do not match",{
+                    position:"bottom-right",
+                    theme:"dark",
+                    autoClose:3000,
+                }
+            );
             return;
         }
 
@@ -37,12 +45,23 @@ export const FormSignUp = ({ showPassword, setShowPassword, showConfirmPassword,
             const response = await api.post('/register', formData);
             
             if (response.status === 201 || response.status === 200) {
-                alert("Account created successfully!");
+                toast.success(
+                    "Account created successfully!",{
+                        position:"bottom-right",
+                        theme:"dark",
+                        autoClose:3000,
+                    }
+                );
                 navigate('/'); // direct to login page after successful registration
             }
         } catch (error) {
-            console.error("Error details:", error.response?.data);
-            alert(error.response?.data?.message || "Error during registration");
+            toast.error(
+                error.response?.data?.message || "Error during registration",{
+                    position:"bottom-right",
+                    theme:"dark",
+                    autoClose:3000,
+                }
+            );
         }
     };
 
@@ -160,6 +179,7 @@ export const FormSignUp = ({ showPassword, setShowPassword, showConfirmPassword,
                     </button>
                 </div>
             </form>
+            <ToastContainer />
         </div>
     );
 };
