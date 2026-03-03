@@ -1,8 +1,58 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { LuArrowUpDown, LuMail, LuLock, LuEye, LuEyeOff } from "react-icons/lu";
 import { Link } from 'react-router-dom';
+import api from '../../../api/connection.jsx';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const FormLogin = ({ showPassword, setShowPassword }) => {
+    
+    // Local state for inputs
+    const [formData, setFormData] = useState({
+        email: '',
+        password: ''
+    });
+
+    // Inputs change manager
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    // Post to login endpoint
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try{
+            const response = await api.post('/login', formData);
+            if(response.status === 200){
+                // Save token on the local storage and user data as needed
+                const { token, user } = response.data;
+                localStorage.setItem('token', token);
+                localStorage.setItem('user', JSON.stringify(user));
+
+                toast.success(
+                    "Logged in successfully!",{
+                        position:"bottom-right",
+                        theme:"dark",
+                        autoClose:3000,
+                    }
+                );
+                // Handle successful login, e.g., store token, redirect, etc.
+            }
+        }catch(error){
+            toast.error(
+                error.response?.data?.message || "Error during login",{
+                    position:"bottom-right",
+                    theme:"dark",
+                    autoClose:3000,
+                }
+            );
+        }
+    };
+
+
     return(
         <div className="p-8 md:p-12 flex flex-col justify-center bg-neutral-900">
             <div className="mb-10 text-center md:text-left">
@@ -14,16 +64,21 @@ export const FormLogin = ({ showPassword, setShowPassword }) => {
                 <p className="text-neutral-500 text-sm mt-2">Login with your account to continue.</p>
             </div>
 
-            <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
+            <form className="space-y-5" onSubmit={handleSubmit}>
                 {/* Email */}
                 <div>
                     <label className="block text-sm font-medium text-neutral-400 mb-2 ml-1">Email</label>
                     <div className="relative group">
                         <LuMail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-600 group-focus-within:text-emerald-400 transition-colors" />
                         <input 
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
                             type="email" 
-                            placeholder="name@example.com"
+                            placeholder="jhon124@gmail.com"
                             className="w-full bg-neutral-800/50 border border-neutral-700 rounded-2xl py-3.5 pl-12 pr-4 text-white placeholder:text-neutral-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all"
+
                         />
                     </div>
                 </div>
@@ -34,6 +89,10 @@ export const FormLogin = ({ showPassword, setShowPassword }) => {
                     <div className="relative group">
                         <LuLock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-600 group-focus-within:text-emerald-400 transition-colors" />
                         <input 
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            required
                             type={showPassword ? "text" : "password"} 
                             placeholder="••••••••"
                             className="w-full bg-neutral-800/50 border border-neutral-700 rounded-2xl py-3.5 pl-12 pr-12 text-white placeholder:text-neutral-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all"
@@ -70,6 +129,7 @@ export const FormLogin = ({ showPassword, setShowPassword }) => {
                     Sign up
                 </Link>
             </div>
+            <ToastContainer />
         </div>
     );
 };
