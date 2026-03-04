@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { LuArrowUpDown, LuMail, LuLock, LuEye, LuEyeOff } from "react-icons/lu";
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import api from '../../../api/connection.jsx';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export const FormLogin = ({ showPassword, setShowPassword }) => {
+
+    const navigate = useNavigate();
     
     // Local state for inputs
     const [formData, setFormData] = useState({
@@ -39,7 +42,10 @@ export const FormLogin = ({ showPassword, setShowPassword }) => {
                         autoClose:3000,
                     }
                 );
-                // Handle successful login, e.g., store token, redirect, etc.
+                // Handle successful dashboard redirection after a short delay to show the toast
+                setTimeout(() => {
+                    navigate('/Dashboard');
+                }, 2000);
             }
         }catch(error){
             toast.error(

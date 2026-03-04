@@ -3,13 +3,21 @@ import React from "react";
 import "./App.css";
 import Login from "./Pages/Auth/Login";
 import SignUp from "./Pages/Auth/SignUp";
+import Dashboard from "./Pages/Dashboard/Dashboard";
+import Layout from "./Layout/Layout";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Public routes */}
         <Route path="/" element={<Login />} />
         <Route path="/SignUp" element={<SignUp />} />
+
+        {/* Private routes */}
+        <Route element={<Layout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
