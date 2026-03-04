@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
     LuLayoutDashboard, LuArrowUpDown, LuSettings,LuLogOut, LuChevronLeft, LuChevronRight, LuMoon, LuSun 
 } from "react-icons/lu";
@@ -7,6 +8,7 @@ import {
 const Sidebar = ({ expanded, setExpanded }) => {
 
     const [darkMode, setDarkMode] = useState(true); // Dark mode active by default
+    const navigate = useNavigate();
 
     // Manage dark mode class on the root element
     useEffect(() => {
@@ -16,6 +18,13 @@ const Sidebar = ({ expanded, setExpanded }) => {
             document.documentElement.classList.remove('dark');
         }
     }, [darkMode]);
+
+    // Logout handler
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        navigate('/'); // Redirect to login page after logout
+    };
 
     return (
         <aside className={`
@@ -62,7 +71,11 @@ const Sidebar = ({ expanded, setExpanded }) => {
             </button>
 
             {/* Logout */}
-            <button className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-red-500/10 text-neutral-500 hover:text-red-500 transition-all">
+            <button 
+                onClick={handleLogout}
+                className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-red-500/10 text-neutral-500 hover:text-red-500 transition-all"
+            >
+                
                 <LuLogOut size={20} />
                 {expanded && <span className="font-medium">Logout</span>}
             </button>
