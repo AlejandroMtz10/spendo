@@ -6,7 +6,21 @@ const api = axios.create({
         'Content-Type': 'application/json',
         'Accept': 'application/json',
     },
-    withCredentials: true, // Using cookies or sessions de Laravel Sanctum
+    withCredentials: true,
 });
+
+// Interceptor for attaching the token to every request
+api.interceptors.request.use(
+    (config) => {
+        const token = localStorage.getItem('token'); // retrieve token from localStorage
+        if (token) {
+            config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
+);
 
 export default api;

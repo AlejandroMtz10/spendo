@@ -38,7 +38,7 @@ class CurrencyController extends Controller
      * Update the specified resource in storage.
      */
     public function update(CurrencyRequest $request, Currency $currency){
-        $this->authorize('update', $currency); // Verificar permisos (opcional)
+        //$this->authorize('update', $currency); // Verificar permisos (opcional)
         $currency->update($request->validated());
         return response() -> json($currency);
     }
@@ -47,7 +47,7 @@ class CurrencyController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(Currency $currency){
-        $this->authorize('delete', $currency); // Verificar permisos (opcional)
+        //$this->authorize('delete', $currency); // Verificar permisos (opcional)
         $currency->delete();
         return response()->json(['message' => 'Currency deleted successfully']);
         
