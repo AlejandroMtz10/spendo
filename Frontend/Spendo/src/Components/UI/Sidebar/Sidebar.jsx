@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { 
     LuLayoutDashboard, LuArrowUpDown, LuSettings,LuLogOut, LuChevronLeft, LuChevronRight, LuMoon, LuSun 
 } from "react-icons/lu";
+
+import { GrMoney } from "react-icons/gr";
 
 {/* Sidebar component received props for expanded state and setter */}
 const Sidebar = ({ expanded, setExpanded }) => {
 
     const [darkMode, setDarkMode] = useState(true); // Dark mode active by default
     const navigate = useNavigate();
+    const location = useLocation(); // Get current path for active link styling
 
     // Manage dark mode class on the root element
     useEffect(() => {
@@ -53,7 +56,22 @@ const Sidebar = ({ expanded, setExpanded }) => {
 
         {/* Nav Links */}
         <nav className="flex-1 px-4 space-y-2">
-            <SidebarItem icon={<LuLayoutDashboard size={20}/>} text="Dashboard" active expanded={expanded} />
+            <Link to="/dashboard">
+                <SidebarItem 
+                    icon={<LuLayoutDashboard size={20}/>} 
+                    text="Dashboard" 
+                    active={location.pathname === "/dashboard"} // Highlight active link based on current path
+                    expanded={expanded} 
+                />
+            </Link>
+            <Link to="/currencies">
+                <SidebarItem 
+                    icon={<GrMoney size={20}/>} 
+                    text="Currencies" 
+                    active={location.pathname === "/currencies"} // Highlight active link based on current path
+                    expanded={expanded} 
+                />
+            </Link>
             <SidebarItem icon={<LuArrowUpDown size={20}/>} text="Transactions" expanded={expanded} />
             <SidebarItem icon={<LuSettings size={20}/>} text="Settings" expanded={expanded} />
         </nav>

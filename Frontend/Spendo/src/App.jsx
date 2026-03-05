@@ -4,6 +4,7 @@ import "./App.css";
 import Login from "./Pages/Auth/Login";
 import SignUp from "./Pages/Auth/SignUp";
 import Dashboard from "./Pages/Dashboard/Dashboard";
+import Currencies from "./Pages/Currencies/Currencies";
 import Layout from "./Layout/Layout";
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         {/* Private routes */}
         <Route element={<Layout />}>
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/currencies" element={<Currencies />} />
         </Route>
       </Routes>
     </BrowserRouter>
