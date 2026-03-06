@@ -1,5 +1,7 @@
 {/* This component is for creating or updating data about currencies */}
 import React from 'react';
+import { HiOutlineSaveAs } from "react-icons/hi";
+import { TiDelete } from "react-icons/ti";
 
 const FormCurrency = ({ isOpen, onClose, selectedCurrency, setSelectedCurrency, isEditing, onSave }) => {
     if (!isOpen) return null;
@@ -35,8 +37,12 @@ const FormCurrency = ({ isOpen, onClose, selectedCurrency, setSelectedCurrency, 
                     </div>
                 </div>
                 <div className="flex gap-3 mt-8">
-                    <button onClick={onClose} className="flex-1 px-4 py-3 rounded-xl text-neutral-400 hover:bg-red-600 hover:text-white transition-all font-semibold">Cancel</button>
-                    <button onClick={onSave} className="flex-1 px-4 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-neutral-950 font-bold transition-all">
+                    <button onClick={onClose} className="flex-1 px-4 py-3 rounded-xl text-neutral-400 hover:bg-red-600 hover:text-white transition-all font-semibold gap-1 flex items-center justify-center active:scale-95">
+                        <TiDelete className='text-2xl' />
+                        Cancel
+                    </button>
+                    <button onClick={onSave} className="flex-1 px-4 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 hover:text-white text-neutral-950 font-bold transition-all gap-1 flex items-center justify-center active:scale-95">
+                        <HiOutlineSaveAs className='text-2xl'/>
                         {isEditing ? 'Update' : 'Save'}
                     </button>
                 </div>

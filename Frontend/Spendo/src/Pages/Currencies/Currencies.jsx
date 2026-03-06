@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { LuPlus, LuSearch } from "react-icons/lu";
 import api from '../../api/connection.jsx';
 import { toast, ToastContainer } from 'react-toastify';
+import { BsCurrencyExchange } from "react-icons/bs";
 
 // Importación de componentes modulares
 import FormCurrency from "../../Components/Currencies/FormCurrency";
@@ -131,7 +132,10 @@ const Currencies = () => {
             {/* Header y Buscador */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-2xl font-bold text-white">Currencies</h1>
+                    <h1 className="text-4xl font-bold text-emerald-600 gap-2 flex items-center mb-1">
+                        <BsCurrencyExchange className="inline-block mr-2" />
+                        Currencies
+                    </h1>
                     <p className="text-neutral-500 text-sm">Manage your available global currencies.</p>
                 </div>
                 
@@ -141,13 +145,13 @@ const Currencies = () => {
                         <input 
                             type="text"
                             placeholder="Search currency..."
-                            className="bg-neutral-800 border border-neutral-700 text-white pl-10 pr-4 py-2 rounded-xl focus:outline-none focus:border-emerald-500 transition-all w-64"
+                            className="bg-emerald-200 border-emerald-300 text-black dark:bg-neutral-800 border dark:border-neutral-700 dark:text-white pl-10 pr-4 py-2 rounded-xl focus:outline-none focus:border-emerald-500 transition-all w-64"
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
                     <button 
                         onClick={openAddModal}
-                        className="bg-emerald-500 hover:bg-emerald-400 text-neutral-950 font-bold px-4 py-2 rounded-xl flex items-center gap-2 transition-all active:scale-95"
+                        className="bg-emerald-500 hover:bg-emerald-400 text-white dark:text-neutral-950 font-bold px-4 py-2 rounded-xl flex items-center gap-2 transition-all active:scale-95"
                     >
                         <LuPlus size={20} /> Add New
                     </button>

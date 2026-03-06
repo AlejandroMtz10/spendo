@@ -19,7 +19,7 @@ const FormCurrencyDelete = ({ isOpen, onClose, onDelete, currencyCode }) => {
                 <div className="flex gap-3 mt-8">
                     <button 
                         onClick={onClose}
-                        className="flex-1 px-4 py-3 rounded-xl text-neutral-400 hover:bg-neutral-800 transition-all font-semibold gap-1 flex items-center justify-center"
+                        className="flex-1 px-4 py-3 rounded-xl text-neutral-400 hover:bg-neutral-800 transition-all font-semibold gap-1 flex items-center justify-center active:scale-95"
                     >
                         <TiDelete className='text-2xl' />
                         Cancel
