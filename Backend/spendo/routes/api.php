@@ -31,6 +31,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/main', [SummaryController::class, 'getMainDashboard']);
         Route::get('/expenses', [SummaryController::class, 'getExpenseAnalysis']);
         Route::get('/savings', [SummaryController::class, 'getSavingsDashboard']);
-    });
+});
 
 });
