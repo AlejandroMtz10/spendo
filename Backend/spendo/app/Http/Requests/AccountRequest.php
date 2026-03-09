@@ -11,24 +11,19 @@ class AccountRequest extends FormRequest
         return true; 
     }
 
-    public function rules(): array{
-        $userId = $this->user()->user_id; // Obtener el ID del usuario autenticado
-        
-        // Obtener el ID de la cuenta desde la ruta (para el ignore en el update)
+    public function rules(): array {
+        $userId = $this->user()->user_id;
         $accountId = $this->route('account') ?? $this->account_id;
 
         return [
-            'account_id' => 'sometimes|uuid', 
             
-            // Validar que el código de moneda exista en tu tabla de currencies
             'code_currency' => [
                 'required',
                 'string',
                 'size:3',
-                'exists:currencies,code_currency', // Importante: que la moneda exista
+                'exists:currencies,code_currency',
             ],
 
-            // El nombre debe ser único, pero solo para este usuario.
             'name' => [
                 'required',
                 'string',
@@ -38,9 +33,20 @@ class AccountRequest extends FormRequest
                     ->ignore($accountId, 'account_id')
             ],
 
-            'type' => 'required|in:Cheques,Ahorros,Credito,Efectivo',
+
+            'type' => 'required|in:cash,bank,credit card,savings,investment',
             'balance' => 'required|numeric|min:0',
         ];
+    }
+
+    protected function prepareForValidation()
+    {
+        $this->merge([
+            'code_currency' => strtoupper(trim($this->code_currency)),
+            'name' => strip_tags(trim($this->name)),
+            'type' => strtolower(trim($this->type)), 
+            'balance' => $this->balance ? str_replace(',', '', $this->balance) : $this->balance,
+        ]);
     }
 
     public function messages(): array{
@@ -53,21 +59,4 @@ class AccountRequest extends FormRequest
         ];
     }
 
-    protected function prepareForValidation()
-    {
-        $this->merge([
-            // 1. Limpiar espacios en blanco (trim) y convertir a mayúsculas
-            'code_currency' => strtoupper(trim($this->code_currency)),
-
-            // 2. Limpiar etiquetas HTML y espacios en el nombre (evita XSS básico)
-            'name' => strip_tags(trim($this->name)),
-
-            // 3. Normalizar el tipo a minúsculas para que coincida con la regla 'in:checking,...'
-            'type' => strtolower(trim($this->type)),
-
-            // 4. Asegurar que el balance no tenga comas (común en inputs de dinero)
-            // Ejemplo: "1,250.50" -> "1250.50"
-            'balance' => $this->balance ? str_replace(',', '', $this->balance) : $this->balance,
-        ]);
-    }
 }
