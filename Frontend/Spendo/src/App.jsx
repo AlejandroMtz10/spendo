@@ -5,6 +5,7 @@ import Login from "./Pages/Auth/Login";
 import SignUp from "./Pages/Auth/SignUp";
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import Currencies from "./Pages/Currencies/Currencies";
+import Accounts from "./Pages/Accounts/Accounts";
 import Layout from "./Layout/Layout";
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/currencies" element={<Currencies />} />
+          <Route path="/accounts" element={<Accounts />} />
         </Route>
       </Routes>
     </BrowserRouter>

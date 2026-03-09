@@ -5,6 +5,7 @@ import {
 } from "react-icons/lu";
 
 import { GrMoney } from "react-icons/gr";
+import { MdAccountBalance } from "react-icons/md";
 
 {/* Sidebar component received props for expanded state and setter */}
 const Sidebar = ({ expanded, setExpanded }) => {
@@ -69,6 +70,14 @@ const Sidebar = ({ expanded, setExpanded }) => {
                     icon={<GrMoney size={20}/>} 
                     text="Currencies" 
                     active={location.pathname === "/currencies"} // Highlight active link based on current path
+                    expanded={expanded} 
+                />
+            </Link>
+            <Link to="/accounts">
+                <SidebarItem 
+                    icon={<MdAccountBalance size={20}/>} 
+                    text="Accounts" 
+                    active={location.pathname === "/accounts"} // Highlight active link based on current path
                     expanded={expanded} 
                 />
             </Link>
