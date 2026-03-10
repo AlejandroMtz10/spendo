@@ -10,14 +10,13 @@ class CategoriesResource extends JsonResource{
      *
      * @return array<string, mixed>
      */
-public function toArray(Request $request): array
-{
+    public function toArray(Request $request): array{
         return [
-            'category_id'    => $this->category_id,
-            'user_id'       => $this->user_id,
-            'name'          => $this->name,
-            'type'          => $this->type, 
-            'created_at' => $this->created_at->toDateTimeString(),
+            'category_id' => $this->category_id,
+            'name'        => $this->name,
+            'type'        => $this->type,
+            'created_at'  => $this->created_at->toDateTimeString(),
+            'updated_at'  => $this->updated_at->toDateTimeString(),
         ];
     }
 }

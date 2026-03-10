@@ -54,21 +54,48 @@ class TransactionController extends Controller{
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-        $transaction = Transaction::findOrFail($id);
-
+    public function show(Transaction $transaction){
+        $this->authorize('view', $transaction);
         return new TransactionsResource($transaction);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Transaction $transaction){
+    public function update(TransactionRequest $request, Transaction $transaction){
         $this->authorize('update', $transaction);
-        $transaction->update($request->only(['user_id','account_id', 'category_id', 'amount', 'type', 'description', 'date']));
-        return new TransactionsResource($transaction);
+        $validated = $request->validated();
+
+        return DB::transaction(function () use ($validated, $transaction) {
+            // revert the old transaction effect
+            $oldAccount = Account::lockForUpdate()->findOrFail($transaction->account_id);
+            
+            if ($transaction->type === 'income') {
+                $oldAccount->balance -= $transaction->amount;
+            } else {
+                $oldAccount->balance += $transaction->amount;
+            }
+            $oldAccount->save();
+
+            // update the transaction with new validated data
+            $transaction->fill($validated);
+            $transaction->save();
+
+            // Apply the new transaction effect
+            // Search for the new account (which could be the same or different)
+            $newAccount = Account::lockForUpdate()->findOrFail($validated['account_id']);
+            
+            if ($validated['type'] === 'income') {
+                $newAccount->balance += $validated['amount'];
+            } else {
+                $newAccount->balance -= $validated['amount'];
+            }
+            $newAccount->save();
+
+            return new TransactionsResource($transaction);
+        });
     }
+    
 
     /**
      * Remove the specified resource from storage.

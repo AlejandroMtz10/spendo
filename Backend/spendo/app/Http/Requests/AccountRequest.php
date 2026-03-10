@@ -11,34 +11,25 @@ class AccountRequest extends FormRequest
         return true; 
     }
 
-    public function rules(): array {
+    public function rules(): array{
         $userId = $this->user()->user_id;
-        $accountId = $this->route('account') ?? $this->account_id;
+        
+        $category = $this->route('category');
+        $categoryId = is_object($category) ? $category->category_id : $category;
 
         return [
             
-            'code_currency' => [
-                'required',
-                'string',
-                'size:3',
-                'exists:currencies,code_currency',
-            ],
-
             'name' => [
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('accounts', 'name')
+                Rule::unique('categories', 'name')
                     ->where('user_id', $userId)
-                    ->ignore($accountId, 'account_id')
+                    ->ignore($categoryId, 'category_id')
             ],
-
-
-            'type' => 'required|in:cash,bank,credit card,savings,investment',
-            'balance' => 'required|numeric|min:0',
+            'type' => 'required|in:Ingreso,Gasto',
         ];
     }
-
     protected function prepareForValidation()
     {
         $this->merge([
@@ -51,11 +42,11 @@ class AccountRequest extends FormRequest
 
     public function messages(): array{
         return [
-            'name.unique' => 'Ya tienes una cuenta registrada con este nombre.',
-            'code_currency.exists' => 'El código de moneda seleccionado no es válido.',
-            'code_currency.size' => 'El código de moneda debe tener exactamente 3 letras (ej. MXN).',
-            'type.in' => 'El tipo de cuenta debe ser: Cheques, Ahorros, Credito o Efectivo.',
-            'balance.min' => 'El saldo inicial no puede ser negativo.',
+            'name.unique' => 'You have an account with this name.',
+            'code_currency.exists' => 'The selected currency code is not valid.',
+            'code_currency.size' => 'The currency code must have exactly 3 letters (e.g., MXN, USD).',
+            'type.in' => 'The account type must be: Cash, Savings, Credit or Checking.',
+            'balance.min' => 'The initial balance cannot be negative.',
         ];
     }
 

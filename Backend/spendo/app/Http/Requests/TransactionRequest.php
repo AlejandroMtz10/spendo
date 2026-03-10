@@ -10,21 +10,24 @@
         }
 
         public function rules(): array {
-            $userId = $this->user()->user_id; // Obtener el ID del usuario autenticado
+            $userId = $this->user()->user_id;
 
             return [
-                // No validar user_id aquí porque se tomara de la sesión/token
                 'account_id' => [
-                    'required', 'uuid',
+                    'required', 
+                    'uuid',
+                    // Check that the account exists and belongs to the authenticated user
                     Rule::exists('accounts', 'account_id')->where('user_id', $userId)
                 ],
                 'category_id' => [
-                    'required', 'uuid',
+                    'required', 
+                    'uuid',
+                    // Check that the category exists and belongs to the authenticated user
                     Rule::exists('categories', 'category_id')->where('user_id', $userId)
                 ],
                 'amount' => 'required|numeric|min:0.01',
-                'type' => 'required|in:income,expense',
-                'description' => 'nullable|string',
+                'type' => 'required|in:income,expense', 
+                'description' => 'nullable|string|max:500',
                 'date' => 'required|date'
             ];
         }

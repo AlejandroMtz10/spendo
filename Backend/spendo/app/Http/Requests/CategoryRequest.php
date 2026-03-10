@@ -12,16 +12,13 @@ class CategoryRequest extends FormRequest
         return true; 
     }
 
-    public function rules(): array
-    {
+    public function rules(): array{
         $userId = $this->user()->user_id;
-        
-        // Obtener el ID ya sea que venga como objeto o como string
         $category = $this->route('category');
         $categoryId = is_object($category) ? $category->category_id : $category;
 
         return [
-            'category_id' => 'sometimes|uuid', 
+            'category_id' => 'nullable|uuid', 
             'name' => [
                 'required',
                 'string',
@@ -30,7 +27,6 @@ class CategoryRequest extends FormRequest
                     ->where('user_id', $userId)
                     ->ignore($categoryId, 'category_id')
             ],
-            // Aseguramos que solo aceptamos estos dos valores exactos
             'type' => 'required|in:Ingreso,Gasto',
         ];
     }

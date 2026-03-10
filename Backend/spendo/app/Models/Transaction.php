@@ -29,6 +29,10 @@ class Transaction extends Model
         'amount' => 'decimal:2'
     ];
 
+    public function getRouteKeyName(){
+        return 'transaction_id';
+    }
+
     /* ================= RELACIONES ================= */
 
     public function user()

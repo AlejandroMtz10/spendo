@@ -20,6 +20,10 @@ class Category extends Model
         'type',
     ];
 
+    public function getRouteKeyName(){
+        return 'category_id';
+    }
+
     /* ================= RELATIONSHIPS ================= */
 
     public function user()
