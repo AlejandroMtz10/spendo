@@ -1,7 +1,9 @@
+import React from 'react';
 import TableSkeleton from '../../UI/TableSkeleton';
 import { LuPencil, LuTrash2 } from "react-icons/lu";
 
 const TableAccounts = ({ data, onEdit, onDelete, loading }) => {
+
     
     // format balance as currency, we can enhance this later to use the actual currency code from the row
     const formatCurrency = (value) => {
@@ -9,6 +11,22 @@ const TableAccounts = ({ data, onEdit, onDelete, loading }) => {
             style: 'currency',
             currency: 'USD',
         }).format(value);
+    };
+
+    const formatDate = (dateString) => {
+        if (!dateString) return "No date";
+        
+        const date = new Date(dateString);
+        
+        if (isNaN(date.getTime())) return "Invalid Date";
+
+        return new Intl.DateTimeFormat('en-US', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+        }).format(date);
     };
 
     return (
@@ -20,12 +38,13 @@ const TableAccounts = ({ data, onEdit, onDelete, loading }) => {
                         <th className="px-6 py-4 font-semibold">Type</th>
                         <th className="px-6 py-4 font-semibold">Currency</th>
                         <th className="px-6 py-4 font-semibold">Balance</th>
+                        <th className="px-6 py-4 font-semibold">Last Updated</th>
                         <th className="px-6 py-4 font-semibold text-center">Actions</th>
                     </tr>
                 </thead>
                 
                 {loading ? (
-                    <TableSkeleton rows={5} />
+                    <TableSkeleton rows={5} columns={6} />
                 ) : (
                     <tbody className="divide-y divide-white dark:divide-neutral-800">
                         {data.length > 0 ? (
@@ -53,6 +72,11 @@ const TableAccounts = ({ data, onEdit, onDelete, loading }) => {
                                         {formatCurrency(item.balance)}
                                     </td>
 
+                                    {/* Date */}
+                                    <td className="px-6 py-4 text-sm text-neutral-600 dark:text-neutral-400 font-medium">
+                                        {formatDate(item.updated_at)}
+                                    </td>
+
                                     {/* Actions */}
                                     <td className="px-6 py-4 flex justify-center gap-2">
                                         <button 
@@ -72,7 +96,7 @@ const TableAccounts = ({ data, onEdit, onDelete, loading }) => {
                             ))
                         ) : (
                             <tr>
-                                <td colSpan="5" className="px-6 py-10 text-center text-emerald-500 dark:text-neutral-500 italic">
+                                <td colSpan="6" className="px-6 py-10 text-center text-emerald-500 dark:text-neutral-500 italic">
                                     No accounts found.
                                 </td>
                             </tr>

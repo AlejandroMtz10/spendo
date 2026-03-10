@@ -21,6 +21,7 @@ public function toArray(Request $request): array
             // Balance se devuelve como float para evitar problemas de precisión en el frontend
             'balance'       => (float) $this->balance, 
             'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at'    => $this->updated_at ? $this->updated_at->toDateTimeString() : null,
         ];
     }
 }

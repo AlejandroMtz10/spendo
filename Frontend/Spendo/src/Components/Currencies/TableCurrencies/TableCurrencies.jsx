@@ -14,7 +14,7 @@ const TableCurrencies = ({ data, onEdit, onDelete, loading }) => {
                 </thead>
                 
                 {loading ? (
-                    <TableSkeleton rows={5} />
+                    <TableSkeleton rows={5} columns={3} />
                 ) : (
                     <tbody className="divide-y divide-white dark:divide-neutral-800">
                         {data.length > 0 ? (
