@@ -27,15 +27,15 @@ class CategoryRequest extends FormRequest
                     ->where('user_id', $userId)
                     ->ignore($categoryId, 'category_id')
             ],
-            'type' => 'required|in:Ingreso,Gasto',
+            'type' => 'required|in:Income,Expense',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'name.unique' => 'Ya tienes una categoría con ese nombre.',
-            'type.in' => 'El tipo debe ser estrictamente: Ingreso o Gasto.',
+            'name.unique' => 'You have a category with that name.',
+            'type.in' => 'The type must be strictly: Income or Expense.',
         ];
     }
 
