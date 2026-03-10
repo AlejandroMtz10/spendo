@@ -29,6 +29,14 @@ class Account extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function getIncrementing(){
+        return false;
+    }
+
+    public function getKeyType(){
+        return 'string';
+    }
+
     public function currency()
     {
         return $this->belongsTo(Currency::class, 'code_currency', 'code_currency');
@@ -38,4 +46,9 @@ class Account extends Model
     {
         return $this->hasMany(Transaction::class, 'account_id');
     }
+    
+    public function getRouteKeyName()
+{
+    return 'account_id';
+}
 }

@@ -9,7 +9,6 @@ use App\Policies\AccountPolicy;
 
 class AppServiceProvider extends ServiceProvider
 {
-    // Esta propiedad por sí sola no hace nada en Laravel 11
     protected $policies = [
         Account::class => AccountPolicy::class,
     ];
@@ -19,9 +18,7 @@ class AppServiceProvider extends ServiceProvider
         //
     }
 
-    public function boot(): void
-    {
-        // REGISTRA LAS POLÍTICAS AQUÍ
+    public function boot(): void{
         foreach ($this->policies as $model => $policy) {
             Gate::policy($model, $policy);
         }
