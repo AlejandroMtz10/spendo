@@ -32,11 +32,7 @@ const Currencies = () => {
             setCurrencies(finalData);
         } catch (error) {
             toast.error(
-                error.response?.data?.message || "Error loading currencies", {
-                    position: "bottom-right",
-                    theme: "dark",
-                    autoClose: 3000,
-                }
+                error.response?.data?.message || "Error loading currencies"
             );
         } finally {
             setLoading(false);
@@ -56,18 +52,10 @@ const Currencies = () => {
                     code_currency: selectedCurrency.code_currency,
                     currency: selectedCurrency.currency
                 });
-                toast.success("Currency updated successfully", {
-                    position: "bottom-right",
-                    theme: "dark",
-                    autoClose: 3000,
-                });
+                toast.success("Currency updated successfully");
             } else {
                 await api.post('/currencies', selectedCurrency);
-                toast.success("Currency created successfully", {
-                    position: "bottom-right",
-                    theme: "dark",
-                    autoClose: 3000,
-                });
+                toast.success("Currency created successfully");
             }
             fetchCurrencies();
             setIsAddEditModalOpen(false);
@@ -77,11 +65,7 @@ const Currencies = () => {
                 ? Object.values(error.response.data.errors).flat()[0] 
                 : (error.response?.data?.message || "Operation failed");
 
-            toast.error(errorMessage, {
-                position: "bottom-right",
-                theme: "dark",
-                autoClose: 3000,
-            });
+            toast.error(errorMessage);
         }
     };
 
@@ -92,13 +76,7 @@ const Currencies = () => {
             fetchCurrencies();
             setIsDeleteModalOpen(false);
         } catch (error) {
-            toast.error(
-                error.response?.data?.message || "Error deleting currency", {
-                    position: "bottom-right",
-                    theme: "dark",
-                    autoClose: 3000,
-                }
-            );
+            toast.error(error.response?.data?.message || "Error deleting currency");
         }
     };
 
@@ -183,7 +161,7 @@ const Currencies = () => {
                 onDelete={handleDelete}
                 currencyCode={selectedCurrency.code_currency}
             />
-            <ToastContainer />
+            <ToastContainer position="bottom-right" theme="dark" />
         </div>
     );
 };

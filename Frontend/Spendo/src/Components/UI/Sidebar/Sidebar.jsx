@@ -3,7 +3,7 @@ import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { 
     LuLayoutDashboard, LuArrowUpDown, LuSettings,LuLogOut, LuChevronLeft, LuChevronRight, LuMoon, LuSun 
 } from "react-icons/lu";
-
+import { BiCategoryAlt } from "react-icons/bi";
 import { GrMoney } from "react-icons/gr";
 import { MdAccountBalance } from "react-icons/md";
 
@@ -78,6 +78,14 @@ const Sidebar = ({ expanded, setExpanded }) => {
                     icon={<MdAccountBalance size={20}/>} 
                     text="Accounts" 
                     active={location.pathname === "/accounts"} // Highlight active link based on current path
+                    expanded={expanded} 
+                />
+            </Link>
+            <Link to="/categories">
+                <SidebarItem 
+                    icon={<BiCategoryAlt size={20}/>} 
+                    text="Categories" 
+                    active={location.pathname === "/categories"} // Highlight active link based on current path
                     expanded={expanded} 
                 />
             </Link>
