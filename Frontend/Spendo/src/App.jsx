@@ -7,6 +7,7 @@ import Dashboard from "./Pages/Dashboard/Dashboard";
 import Currencies from "./Pages/Currencies/Currencies";
 import Accounts from "./Pages/Accounts/Accounts";
 import Categories from "./Pages/Categories/Categories";
+import Transactions from "./Pages/Transactions/Transactions";
 import Layout from "./Layout/Layout";
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
           <Route path="/currencies" element={<Currencies />} />
           <Route path="/accounts" element={<Accounts />} />
           <Route path="/categories" element={<Categories />} />
+          <Route path="/transactions" element={<Transactions />} />
         </Route>
       </Routes>
     </BrowserRouter>

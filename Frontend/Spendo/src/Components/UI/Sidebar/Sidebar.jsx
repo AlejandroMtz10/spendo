@@ -89,7 +89,14 @@ const Sidebar = ({ expanded, setExpanded }) => {
                     expanded={expanded} 
                 />
             </Link>
-            <SidebarItem icon={<LuArrowUpDown size={20}/>} text="Transactions" expanded={expanded} />
+            <Link to="/transactions">
+                <SidebarItem 
+                    icon={<LuArrowUpDown size={20}/>} 
+                    text="Transactions" 
+                    active={location.pathname === "/transactions"} // Highlight active link based on current path
+                    expanded={expanded} 
+                />
+            </Link>
             <SidebarItem icon={<LuSettings size={20}/>} text="Settings" expanded={expanded} />
         </nav>
 
