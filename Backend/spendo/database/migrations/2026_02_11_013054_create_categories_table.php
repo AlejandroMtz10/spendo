@@ -12,7 +12,7 @@ return new class extends Migration {
             $table->uuid('user_id');
 
             $table->string('name', 100);
-            $table->enum('type', ['income', 'expense']);
+            $table->enum('type', ['Income', 'Expense']);
 
             $table->timestamps();
 

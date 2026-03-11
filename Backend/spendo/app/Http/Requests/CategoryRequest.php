@@ -39,14 +39,12 @@ class CategoryRequest extends FormRequest
         ];
     }
 
-    protected function prepareForValidation()
-    {
+    protected function prepareForValidation(){
+        $type = $this->type ? ucfirst(strtolower(trim($this->type))) : null;
+
         $this->merge([
-            // Limpiar espacios y poner la primera letra en mayúscula (opcional pero estético)
             'name' => ucfirst(trim(strip_tags($this->name))),
-            
-            // Normalizacion del tipo para que siempre coincida con la regla 'in'
-            'type' => ucfirst(strtolower(trim($this->type))), 
+            'type' => $type,
         ]);
     }
 }
