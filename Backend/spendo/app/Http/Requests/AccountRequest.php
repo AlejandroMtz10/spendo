@@ -11,25 +11,25 @@ class AccountRequest extends FormRequest
         return true; 
     }
 
-    public function rules(): array{
-        $userId = $this->user()->user_id;
-        
-        $category = $this->route('category');
-        $categoryId = is_object($category) ? $category->category_id : $category;
+        public function rules(): array {
+            $userId = $this->user()->user_id;
+            $account = $this->route('account');
+            $accountId = is_object($account) ? $account->account_id : $account;
 
-        return [
-            
-            'name' => [
-                'required',
-                'string',
-                'max:255',
-                Rule::unique('categories', 'name')
-                    ->where('user_id', $userId)
-                    ->ignore($categoryId, 'category_id')
-            ],
-            'type' => 'required|in:Ingreso,Gasto',
-        ];
-    }
+            return [
+                'name' => [
+                    'required',
+                    'string',
+                    'max:255',
+                    Rule::unique('accounts', 'name')
+                        ->where('user_id', $userId)
+                        ->ignore($accountId, 'account_id')
+                ],
+                'type' => 'required|in:cash,bank,credit card,savings,investment',
+                'code_currency' => 'required|exists:currencies,code_currency',
+                'balance' => 'required|numeric|min:0',
+            ];
+        }
     protected function prepareForValidation()
     {
         $this->merge([
