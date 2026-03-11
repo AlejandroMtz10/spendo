@@ -23,6 +23,10 @@ class Category extends Model{
         'type',
     ];
 
+    public function uniqueIds(): array{
+        return ['category_id'];
+    }
+
     public function getRouteKeyName(){
         return 'category_id';
     }

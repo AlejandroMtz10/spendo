@@ -12,8 +12,12 @@ class CategoryRequest extends FormRequest
         return true; 
     }
 
-    public function rules(): array{
-        $userId = $this->user()->user_id;
+    public function rules(): array {
+        $user = $this->user();
+        
+        if (!$user) return []; 
+
+        $userId = $user->user_id;
         $category = $this->route('category');
         $categoryId = is_object($category) ? $category->category_id : $category;
 
@@ -22,7 +26,7 @@ class CategoryRequest extends FormRequest
             'name' => [
                 'required',
                 'string',
-                'max:255',
+                'max:100',
                 Rule::unique('categories', 'name')
                     ->where('user_id', $userId)
                     ->ignore($categoryId, 'category_id')
