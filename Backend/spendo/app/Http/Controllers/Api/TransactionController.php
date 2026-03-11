@@ -36,7 +36,6 @@ class TransactionController extends Controller{
         $validated = $request->validated();
 
         return DB::transaction(function () use ($validated, $user) {
-            // Crear la transaccion con el user_id del usuario autenticado
             $transaction = Transaction::create([
                 ...$validated,
                 'user_id' => $user->user_id
@@ -51,6 +50,8 @@ class TransactionController extends Controller{
             }
 
             $account->save();
+
+            $transaction->load(['category', 'account']);
 
             return new TransactionsResource($transaction);
         });
@@ -72,7 +73,7 @@ class TransactionController extends Controller{
         $validated = $request->validated();
 
         return DB::transaction(function () use ($validated, $transaction) {
-            // revert the old transaction effect
+            // revert the old transaction effect on the account
             $oldAccount = Account::lockForUpdate()->findOrFail($transaction->account_id);
             
             if ($transaction->type === 'income') {
@@ -82,12 +83,11 @@ class TransactionController extends Controller{
             }
             $oldAccount->save();
 
-            // update the transaction with new validated data
+            // update the transaction with new data
             $transaction->fill($validated);
             $transaction->save();
 
-            // Apply the new transaction effect
-            // Search for the new account (which could be the same or different)
+            // apply the new transaction effect on the (possibly new) account
             $newAccount = Account::lockForUpdate()->findOrFail($validated['account_id']);
             
             if ($validated['type'] === 'income') {
@@ -96,6 +96,9 @@ class TransactionController extends Controller{
                 $newAccount->balance -= $validated['amount'];
             }
             $newAccount->save();
+
+            // Load the updated relationships to ensure the response has the latest data
+            $transaction->load(['category', 'account']);
 
             return new TransactionsResource($transaction);
         });

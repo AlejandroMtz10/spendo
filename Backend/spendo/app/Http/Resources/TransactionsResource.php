@@ -20,6 +20,8 @@ class TransactionsResource extends JsonResource{
             'type'           => $this->type,
             'description'    => $this->description,
             'date'           => $this->date,
+            'category' => $this->whenLoaded('category'), 
+            'account' => $this->whenLoaded('account'),
             'created_at'     => $this->created_at->toDateTimeString(),
             'updated_at'     => $this->updated_at ? $this->updated_at->toDateTimeString() : null,
         ];
