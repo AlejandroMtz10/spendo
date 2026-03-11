@@ -16,9 +16,14 @@ class TransactionController extends Controller{
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        return TransactionsResource::collection(Transaction::where('user_id', auth('api')->user()->user_id)->get());
+    public function index(){
+        // use with to eager load category and account relationships to avoid N+1 problem
+        $transactions = Transaction::where('user_id', auth()->user()->user_id)
+            ->with(['category', 'account']) 
+            ->latest()
+            ->get();
+
+        return TransactionsResource::collection($transactions);
     }
 
     /**
@@ -117,6 +122,7 @@ class TransactionController extends Controller{
             $transaction->delete();
         });
 
-        return response()->json(['message' => 'Transacción eliminada y saldo actualizado']);
+        return response()->json(['message' => 'Transaction deleted successfully']);
     }
+    
 }

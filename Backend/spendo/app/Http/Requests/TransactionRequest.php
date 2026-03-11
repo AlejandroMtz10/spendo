@@ -31,4 +31,10 @@
                 'date' => 'required|date'
             ];
         }
+
+        protected function prepareForValidation(){
+            $this->merge([
+                'type' => strtolower(trim($this->type)),
+            ]);
+        }
     }
