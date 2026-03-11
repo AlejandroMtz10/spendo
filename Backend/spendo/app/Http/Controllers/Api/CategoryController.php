@@ -18,9 +18,28 @@ class CategoryController extends Controller{
         return CategoriesResource::collection($categories);
     }
 
-    public function store(CategoryRequest $request){
-        $category = $request->user()->categories()->create($request->validated());
-        return new CategoriesResource($category);
+    public function store(CategoryRequest $request)
+    {
+        try {
+            // Validate data and get the validated values
+            $validated = $request->validated();
+
+            // Create category using the relationship to ensure user_id is set correctly
+            $category = $request->user()->categories()->create($validated);
+
+            return new CategoriesResource($category);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'message' => 'Error interno en el servidor',
+                'debug_error' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine()
+            ], 500);
+        }
     }
 
     public function show(Category $category){
