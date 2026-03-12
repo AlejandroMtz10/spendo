@@ -8,6 +8,7 @@ import Currencies from "./Pages/Currencies/Currencies";
 import Accounts from "./Pages/Accounts/Accounts";
 import Categories from "./Pages/Categories/Categories";
 import Transactions from "./Pages/Transactions/Transactions";
+import Settings from "./Pages/Settings/Settings";
 import Layout from "./Layout/Layout";
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
           <Route path="/accounts" element={<Accounts />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/transactions" element={<Transactions />} />
+          <Route path="/settings" element={<Settings />} />
         </Route>
       </Routes>
     </BrowserRouter>

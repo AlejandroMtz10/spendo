@@ -97,7 +97,14 @@ const Sidebar = ({ expanded, setExpanded }) => {
                     expanded={expanded} 
                 />
             </Link>
-            <SidebarItem icon={<LuSettings size={20}/>} text="Settings" expanded={expanded} />
+            <Link to="/settings">
+                <SidebarItem
+                    icon={<LuSettings size={20}/>}
+                    text="Settings"
+                    active={location.pathname === "/settings"}
+                    expanded={expanded}
+                />
+            </Link>
         </nav>
 
         {/* Footer: DarkMode Toggle & Logout */}
