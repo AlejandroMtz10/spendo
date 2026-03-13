@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { LuArrowUpDown, LuMail, LuLock, LuEye, LuEyeOff, LuUser, LuX } from "react-icons/lu";
 import { useNavigate } from 'react-router-dom';
 import api from '../../../api/connection.jsx';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export const FormSignUp = ({ showPassword, setShowPassword, showConfirmPassword, setShowConfirmPassword }) => {
@@ -179,7 +179,6 @@ export const FormSignUp = ({ showPassword, setShowPassword, showConfirmPassword,
                     </button>
                 </div>
             </form>
-            <ToastContainer />
         </div>
     );
 };

@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import React from "react";
-import "./App.css";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Login from "./Pages/Auth/Login";
 import SignUp from "./Pages/Auth/SignUp";
 import Dashboard from "./Pages/Dashboard/Dashboard";
@@ -10,6 +11,7 @@ import Categories from "./Pages/Categories/Categories";
 import Transactions from "./Pages/Transactions/Transactions";
 import Settings from "./Pages/Settings/Settings";
 import Layout from "./Layout/Layout";
+import "./App.css";
 
 function App() {
   return (
@@ -29,6 +31,7 @@ function App() {
           <Route path="/settings" element={<Settings />} />
         </Route>
       </Routes>
+      <ToastContainer position="bottom-right" theme="dark" />
     </BrowserRouter>
   );
 }

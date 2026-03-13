@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { LuPlus, LuSearch } from "react-icons/lu";
 import { MdOutlineAccountBalanceWallet } from "react-icons/md";
 import api from '../../api/connection.jsx';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 import FormAccount from "../../Components/Accounts/FormAccount";
 import FormAccountDelete from "../../Components/Accounts/FormAccountDelete";
@@ -161,7 +161,6 @@ const Accounts = () => {
                 onDelete={handleDelete}
                 accountName={selectedAccount.name}
             />
-            <ToastContainer position="bottom-right" theme="dark" />
         </div>
     );
 };

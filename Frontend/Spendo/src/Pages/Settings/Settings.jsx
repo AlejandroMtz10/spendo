@@ -4,7 +4,7 @@ import { HiOutlineLockClosed, HiOutlineTrash } from "react-icons/hi";
 import Profile from '../../Components/Settings/Profile';
 import ModalPassword from '../../Components/Settings/ModalChangePassword';
 import ModalDeleteAccount from '../../Components/Settings/ModalDeleteAccount';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 const Settings = () => {
     const [user, setUser] = useState({ name: '', email: '' });
@@ -93,7 +93,6 @@ const Settings = () => {
 
             <ModalPassword isOpen={isPasswordModalOpen} onClose={() => setIsPasswordModalOpen(false)} />
             <ModalDeleteAccount isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)} />
-            <ToastContainer position="bottom-right" theme="dark" />
         </div>
     );
 };

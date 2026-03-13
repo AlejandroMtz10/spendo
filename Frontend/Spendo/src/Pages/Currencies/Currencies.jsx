@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { LuPlus, LuSearch } from "react-icons/lu";
 import api from '../../api/connection.jsx';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { BsCurrencyExchange } from "react-icons/bs";
 
 // Importación de componentes modulares
@@ -161,7 +161,7 @@ const Currencies = () => {
                 onDelete={handleDelete}
                 currencyCode={selectedCurrency.code_currency}
             />
-            <ToastContainer position="bottom-right" theme="dark" />
+
         </div>
     );
 };

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { LuPlus, LuSearch, LuArrowLeftRight } from "react-icons/lu";
 import api from '../../api/connection.jsx';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 import FormTransaction from "../../Components/Transactions/FormTransaction";
 import FormTransactionDelete from "../../Components/Transactions/FormTransactionDelete";
@@ -138,7 +138,6 @@ const Transactions = () => {
                 description={selectedTransaction.description}
             />
             
-            <ToastContainer position="bottom-right" theme="dark" />
         </div>
     );
 };

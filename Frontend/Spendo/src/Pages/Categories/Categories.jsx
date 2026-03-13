@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { LuPlus, LuSearch, LuTags } from "react-icons/lu";
 import api from '../../api/connection.jsx';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 import FormCategory from "../../Components/Categories/FormCategory";
 import FormCategoryDelete from "../../Components/Categories/FormCategoryDelete";
@@ -156,7 +156,6 @@ const Categories = () => {
                 onDelete={handleDelete}
                 categoryName={selectedCategory.name}
             />
-            <ToastContainer position="bottom-right" theme="dark" />
         </div>
     );
 };

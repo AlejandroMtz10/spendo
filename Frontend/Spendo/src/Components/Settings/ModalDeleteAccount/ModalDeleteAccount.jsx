@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import api from '../../../api/connection.jsx';
 import { HiOutlineX, HiOutlineExclamationCircle } from "react-icons/hi";
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const ModalDeleteAccount = ({ isOpen, onClose }) => {
     const [credentials, setCredentials] = useState({ email: '', password: '' });
@@ -22,9 +23,11 @@ const ModalDeleteAccount = ({ isOpen, onClose }) => {
             
             // If successful, clear local storage and redirect to login page
             localStorage.clear(); 
+            toast.success("Account deleted successfully");
             navigate('/');
         } catch (err) {
             setError(err.response?.data?.message || "Invalid credentials or error deleting account");
+            toast.error(err.response?.data?.message || "Error deleting account");
         } finally {
             setLoading(false);
         }

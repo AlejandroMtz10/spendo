@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import api from '../../../api/connection.jsx';
 import { HiOutlineX, HiOutlineLockClosed } from "react-icons/hi";
+import { toast } from 'react-toastify';
 
 const ModalChangePassword = ({ isOpen, onClose }) => {
     const [formData, setFormData] = useState({
@@ -21,11 +22,11 @@ const ModalChangePassword = ({ isOpen, onClose }) => {
 
         try {
             await api.post('/change-password', formData);
-            alert("Password updated successfully!");
             setFormData({ email: '', last_password: '', new_password: '', new_password_confirmation: '' });
+            toast.success("Password updated successfully!");
             onClose();
         } catch (err) {
-            setError(err.response?.data?.message || "Error al actualizar la contraseña");
+            toast.error(err.response?.data?.message || "Error updating password");
         } finally {
             setLoading(false);
         }

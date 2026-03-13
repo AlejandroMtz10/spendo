@@ -3,7 +3,7 @@ import { LuArrowUpDown, LuMail, LuLock, LuEye, LuEyeOff } from "react-icons/lu";
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import api from '../../../api/connection.jsx';
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export const FormLogin = ({ showPassword, setShowPassword }) => {
@@ -135,7 +135,6 @@ export const FormLogin = ({ showPassword, setShowPassword }) => {
                     Sign up
                 </Link>
             </div>
-            <ToastContainer />
         </div>
     );
 };
