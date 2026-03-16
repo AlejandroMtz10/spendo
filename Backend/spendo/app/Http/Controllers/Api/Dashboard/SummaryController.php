@@ -13,79 +13,51 @@ use Carbon\Carbon;
 class SummaryController extends Controller
 {
     public function getMainDashboard(Request $request) {
-        $userId = $request->user()->user_id;
-        $now = Carbon::now();
+        try {
+            $userId = $request->user()->user_id;
+            $now = Carbon::now();
 
-        // Balance group by currency
-        $balancesByCurrency = Account::where('user_id', $userId)
-            ->select('currency', DB::raw('SUM(balance) as total'))
-            ->groupBy('currency')
-            ->get();
+            // Balance group by currency
+            $balancesByCurrency = Account::where('user_id', $userId)
+                ->select('currency', DB::raw('SUM(balance) as total'))
+                ->groupBy('currency')
+                ->get()
+                ->map(function($item) {
+                    return [
+                        'currency' => $item->currency,
+                        'total' => (float) $item->total
+                    ];
+                });
 
-        // Monthly totals for income and expenses
-        $monthTotals = Transaction::where('user_id', $userId)
-            ->whereMonth('date', $now->month)
-            ->whereYear('date', $now->year)
-            ->selectRaw("
-                SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) as income,
-                SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) as expense
-            ")
-            ->first();
+            $monthTotals = Transaction::where('user_id', $userId)
+                ->whereMonth('date', $now->month)
+                ->whereYear('date', $now->year)
+                ->selectRaw("
+                    SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) as income,
+                    SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) as expense
+                ")
+                ->first();
 
-        return response()->json([
-            'balances' => $balancesByCurrency, // [ {currency: 'MXN', total: 500}, {currency: 'USD', total: 100} ]
-            'month_income'  => (float) ($monthTotals->income ?? 0),
-            'month_expense' => (float) ($monthTotals->expense ?? 0),
-        ]);
+            return response()->json([
+                'balances' => $balancesByCurrency,
+                'month_income'  => (float) ($monthTotals->income ?? 0),
+                'month_expense' => (float) ($monthTotals->expense ?? 0),
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
-    public function getExpenseAnalysis(Request $request)
-    {
-        $userId = $request->user()->user_id;
-        $now = Carbon::now();
-
-        $expensesByCategory = Transaction::where('transactions.user_id', $userId)
-            ->where('transactions.type', 'expense')
-            ->whereMonth('date', $now->month)
-            ->join('categories', 'transactions.category_id', '=', 'categories.category_id')
-            ->select('categories.name', DB::raw('SUM(transactions.amount) as total'))
-            ->groupBy('categories.name')
-            ->orderByDesc('total')
-            ->get()
-            ->map(function ($item) {
-                return [
-                    'name' => $item->name,
-                    'total' => (float) $item->total
-                ];
-            });
-
-        $lastMonth = Carbon::now()->subMonth();
-        $lastMonthTotal = Transaction::where('user_id', $userId)
-            ->where('type', 'expense')
-            ->whereMonth('date', $lastMonth->month)
-            ->whereYear('date', $lastMonth->year)
-            ->sum('amount');
-
-        return response()->json([
-            'by_category' => $expensesByCategory,
-            'comparison'  => [
-                'current_month' => (float) $expensesByCategory->sum('total'),
-                'last_month'    => (float) $lastMonthTotal,
-            ]
-        ]);
-    }
-
-    public function getSavingsDashboard(Request $request){
+    public function getSavingsDashboard(Request $request) {
         $userId = $request->user()->user_id;
 
         $historicalSavings = Transaction::where('user_id', $userId)
             ->selectRaw("
-                TO_CHAR(date, 'Mon') as month,
+                TO_CHAR(date, 'Mon') as month_name,
                 EXTRACT(MONTH FROM date) as month_num,
                 SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) as income,
                 SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) as expense
             ")
-            // Filter by the last 6 months (including current month)
             ->where('date', '>=', Carbon::now()->startOfMonth()->subMonths(5))
             ->groupBy(DB::raw("TO_CHAR(date, 'Mon'), EXTRACT(MONTH FROM date)"))
             ->orderBy('month_num')
@@ -96,12 +68,9 @@ class SummaryController extends Controller
                 $surplus = $income - $expense;
 
                 return [
-                    'month' => $item->month,
-                    // Sending the surplus as "savings" for the frontend to plot, even if it's negative
+                    'month' => $item->month_name,
                     'savings' => (float) $surplus, 
-                    // Savings rate as percentage, with a check to avoid division by zero
                     'savings_rate' => $income > 0 ? round(($surplus / $income) * 100, 2) : 0,
-                    // Sending income and expense separately for potential use in the frontend (e.g., for a stacked bar chart)
                     'income' => $income,
                     'expense' => $expense
                 ];
