@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Transaction;
 use App\Models\Account;
-use App\Http\Resources\TransactionsResource;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
@@ -17,25 +16,25 @@ class SummaryController extends Controller
             $userId = $request->user()->user_id;
             $now = Carbon::now();
 
-            // Balance group by currency
+            // Balance by currency
             $balancesByCurrency = Account::where('user_id', $userId)
-                ->select('currency', DB::raw('SUM(balance) as total'))
-                ->groupBy('currency')
-                ->get()
-                ->map(function($item) {
-                    return [
-                        'currency' => $item->currency,
-                        'total' => (float) $item->total
-                    ];
-                });
+                        ->select('code_currency as currency', DB::raw('SUM(balance) as total'))
+                        ->groupBy('code_currency')
+                        ->get()
+                        ->map(function($item) {
+                            return [
+                                // Aquí lo devolvemos como 'currency' para que tu frontend no cambie
+                                'currency' => $item->currency, 
+                                'total' => (float) $item->total
+                            ];
+                        });
 
+            // 2. Totales: Usamos selectRaw pero sin columnas extra para evitar líos de Group By
             $monthTotals = Transaction::where('user_id', $userId)
                 ->whereMonth('date', $now->month)
                 ->whereYear('date', $now->year)
-                ->selectRaw("
-                    SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) as income,
-                    SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) as expense
-                ")
+                ->select(DB::raw("SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) as income"))
+                ->addSelect(DB::raw("SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) as expense"))
                 ->first();
 
             return response()->json([
@@ -44,40 +43,65 @@ class SummaryController extends Controller
                 'month_expense' => (float) ($monthTotals->expense ?? 0),
             ]);
         } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage(), 'trace' => $e->getTraceAsString()], 500);
+        }
+    }
+
+    public function getExpenseAnalysis(Request $request) {
+        try {
+            $userId = $request->user()->user_id;
+            $now = Carbon::now();
+
+            // Corregido: Postgres requiere que 'categories.name' esté en el GROUP BY
+            $expensesByCategory = Transaction::join('categories', 'transactions.category_id', '=', 'categories.category_id')
+                ->where('transactions.user_id', $userId)
+                ->where('transactions.type', 'expense')
+                ->whereMonth('transactions.date', $now->month)
+                ->whereYear('transactions.date', $now->year)
+                ->select('categories.name', DB::raw('SUM(transactions.amount) as total'))
+                ->groupBy('categories.name')
+                ->orderByDesc(DB::raw('SUM(transactions.amount)'))
+                ->get();
+
+            return response()->json([
+                'by_category' => $expensesByCategory->map(fn($item) => [
+                    'name' => $item->name,
+                    'total' => (float) $item->total
+                ]),
+            ]);
+        } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 
     public function getSavingsDashboard(Request $request) {
-        $userId = $request->user()->user_id;
+        try {
+            $userId = $request->user()->user_id;
 
-        $historicalSavings = Transaction::where('user_id', $userId)
-            ->selectRaw("
-                TO_CHAR(date, 'Mon') as month_name,
-                EXTRACT(MONTH FROM date) as month_num,
-                SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) as income,
-                SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) as expense
-            ")
-            ->where('date', '>=', Carbon::now()->startOfMonth()->subMonths(5))
-            ->groupBy(DB::raw("TO_CHAR(date, 'Mon'), EXTRACT(MONTH FROM date)"))
-            ->orderBy('month_num')
-            ->get()
-            ->map(function ($item) {
-                $income = (float) $item->income;
-                $expense = (float) $item->expense;
-                $surplus = $income - $expense;
+            // En Postgres, el GROUP BY debe ser idéntico a la expresión del SELECT
+            $historicalSavings = Transaction::where('user_id', $userId)
+                ->where('date', '>=', Carbon::now()->startOfMonth()->subMonths(5))
+                ->select(
+                    DB::raw("TO_CHAR(date, 'Mon') as month_name"),
+                    DB::raw("EXTRACT(MONTH FROM date) as month_num"),
+                    DB::raw("SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) as income"),
+                    DB::raw("SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) as expense")
+                )
+                ->groupBy(DB::raw("TO_CHAR(date, 'Mon'), EXTRACT(MONTH FROM date)"))
+                ->orderBy('month_num')
+                ->get();
 
-                return [
+            return response()->json([
+                'savings_trend' => $historicalSavings->map(fn($item) => [
                     'month' => $item->month_name,
-                    'savings' => (float) $surplus, 
-                    'savings_rate' => $income > 0 ? round(($surplus / $income) * 100, 2) : 0,
-                    'income' => $income,
-                    'expense' => $expense
-                ];
-            });
-
-        return response()->json([
-            'savings_trend' => $historicalSavings
-        ]);
+                    'savings' => (float) ($item->income - $item->expense),
+                    'income' => (float) $item->income,
+                    'expense' => (float) $item->expense,
+                    'savings_rate' => $item->income > 0 ? round((($item->income - $item->expense) / $item->income) * 100, 2) : 0
+                ])
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 }
