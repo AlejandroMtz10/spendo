@@ -71,8 +71,7 @@ class SummaryController extends Controller
         ]);
     }
 
-    public function getSavingsDashboard(Request $request)
-    {
+    public function getSavingsDashboard(Request $request){
         $userId = $request->user()->user_id;
 
         $historicalSavings = Transaction::where('user_id', $userId)
@@ -82,7 +81,8 @@ class SummaryController extends Controller
                 SUM(CASE WHEN type = 'income' THEN amount ELSE 0 END) as income,
                 SUM(CASE WHEN type = 'expense' THEN amount ELSE 0 END) as expense
             ")
-            ->where('date', '>=', Carbon::now()->subMonths(6))
+            // Filter by the last 6 months (including current month)
+            ->where('date', '>=', Carbon::now()->startOfMonth()->subMonths(5))
             ->groupBy(DB::raw("TO_CHAR(date, 'Mon'), EXTRACT(MONTH FROM date)"))
             ->orderBy('month_num')
             ->get()
@@ -93,8 +93,13 @@ class SummaryController extends Controller
 
                 return [
                     'month' => $item->month,
-                    'savings' => (float) ($surplus > 0 ? $surplus : 0),
-                    'savings_rate' => $income > 0 ? round(($surplus / $income) * 100, 2) : 0
+                    // Sending the surplus as "savings" for the frontend to plot, even if it's negative
+                    'savings' => (float) $surplus, 
+                    // Savings rate as percentage, with a check to avoid division by zero
+                    'savings_rate' => $income > 0 ? round(($surplus / $income) * 100, 2) : 0,
+                    // Sending income and expense separately for potential use in the frontend (e.g., for a stacked bar chart)
+                    'income' => $income,
+                    'expense' => $expense
                 ];
             });
 
