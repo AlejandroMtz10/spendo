@@ -16,6 +16,13 @@ class SummaryController extends Controller
         $userId = $request->user()->user_id;
         $now = Carbon::now();
 
+        // Balance group by currency
+        $balancesByCurrency = Account::where('user_id', $userId)
+            ->select('currency', DB::raw('SUM(balance) as total'))
+            ->groupBy('currency')
+            ->get();
+
+        // Monthly totals for income and expenses
         $monthTotals = Transaction::where('user_id', $userId)
             ->whereMonth('date', $now->month)
             ->whereYear('date', $now->year)
@@ -26,12 +33,9 @@ class SummaryController extends Controller
             ->first();
 
         return response()->json([
-            'total_balance' => (float) Account::where('user_id', $userId)->sum('balance'),
+            'balances' => $balancesByCurrency, // [ {currency: 'MXN', total: 500}, {currency: 'USD', total: 100} ]
             'month_income'  => (float) ($monthTotals->income ?? 0),
             'month_expense' => (float) ($monthTotals->expense ?? 0),
-            'recent_transactions' => TransactionsResource::collection(
-                $request->user()->transactions()->latest()->take(5)->get()
-            )
         ]);
     }
 
