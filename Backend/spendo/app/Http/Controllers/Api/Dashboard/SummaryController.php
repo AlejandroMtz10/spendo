@@ -23,13 +23,11 @@ class SummaryController extends Controller
                         ->get()
                         ->map(function($item) {
                             return [
-                                // Aquí lo devolvemos como 'currency' para que tu frontend no cambie
                                 'currency' => $item->currency, 
                                 'total' => (float) $item->total
                             ];
                         });
 
-            // 2. Totales: Usamos selectRaw pero sin columnas extra para evitar líos de Group By
             $monthTotals = Transaction::where('user_id', $userId)
                 ->whereMonth('date', $now->month)
                 ->whereYear('date', $now->year)
@@ -52,7 +50,6 @@ class SummaryController extends Controller
             $userId = $request->user()->user_id;
             $now = Carbon::now();
 
-            // Corregido: Postgres requiere que 'categories.name' esté en el GROUP BY
             $expensesByCategory = Transaction::join('categories', 'transactions.category_id', '=', 'categories.category_id')
                 ->where('transactions.user_id', $userId)
                 ->where('transactions.type', 'expense')
@@ -78,7 +75,6 @@ class SummaryController extends Controller
         try {
             $userId = $request->user()->user_id;
 
-            // En Postgres, el GROUP BY debe ser idéntico a la expresión del SELECT
             $historicalSavings = Transaction::where('user_id', $userId)
                 ->where('date', '>=', Carbon::now()->startOfMonth()->subMonths(5))
                 ->select(
