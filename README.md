@@ -85,6 +85,21 @@ spendo/
 
 <hr>
 
+<h2 align="center">
+    Screenshots
+</h2>
+
+<div align="center">
+    <img src="/Images/login.png" />
+    <img src="/Images/signup.png" />
+    <img src="/Images/Dashboard_dark_mode.png" />
+    <img src="/Images/Dashboard_light_mode.png" />
+    <img src="/Images/currencies.png" />
+    <img src="/Images/Transactions.png" />
+</div>
+
+<hr>
+
 <div align="center">
     <p>Developed by <strong>Eng. Alejandro Martínez</strong></p>
     <p><code>v1.2.0</code></p>
