@@ -1,0 +1,12 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    image: spendo-app:latest # Añade esto para mantener orden
+    ports:
+      - "8080:80" # Cambié a 8080 para que no choque con otros servicios de Windows
+    env_file:
+      - ./Backend/spendo/.env # Asegúrate que la ruta sea correcta
+    container_name: spendo_app
+    restart: always
