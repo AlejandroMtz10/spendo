@@ -1,6 +1,12 @@
 <IfModule mod_rewrite.c>
-    <IfModule mod_negotiation.c>
-        Options -MultiViews -Indexes
+    <IfModule mod_headers.c>
+        # Borramos cualquier header previo para evitar el "multiple values"
+        Header unset Access-Control-Allow-Origin
+        Header unset Access-Control-Allow-Credentials
+        
+        # Dejamos que Laravel ponga los suyos, pero si fallara, 
+        # podrías descomentar la siguiente línea como último recurso:
+        # Header set Access-Control-Allow-Origin "http://localhost:3000"
     </IfModule>
 
     RewriteEngine On
@@ -9,11 +15,7 @@
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
-    # Handle X-XSRF-Token Header
-    RewriteCond %{HTTP:x-xsrf-token} .
-    RewriteRule .* - [E=HTTP_X_XSRF_TOKEN:%{HTTP:X-XSRF-Token}]
-
-    # Redirect Trailing Slashes If Not A Folder...
+    # Redirect Trailing Slashes...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
