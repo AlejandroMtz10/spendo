@@ -27,6 +27,8 @@ export const FormLogin = ({ showPassword, setShowPassword }) => {
     // Post to login endpoint
     const handleSubmit = async (e) => {
         e.preventDefault();
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
         try{
             const response = await api.post('/login', formData);
             if(response.status === 200){
