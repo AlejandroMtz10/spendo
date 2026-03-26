@@ -15,7 +15,7 @@ RUN pnpm install --frozen-lockfile
 COPY . .
 
 # 4. Creamos el .env
-RUN echo "VITE_API_URL=http://localhost:8000/api" > .env
+RUN echo "VITE_API_URL=/api" > .env
 
 RUN pnpm run build
 
